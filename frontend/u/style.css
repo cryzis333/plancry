@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-void: #0a0a0f;
+    --bg-panel: #12121a;
+    --border: #23232f;
+    --text-primary: #e4e4ec;
+    --accent-cyan: #00e5ff;
+    --accent-magenta: #ff2e88;
+}
+
+body {
+    background-color: var(--bg-void);
+    color: var(--text-primary);
+}
+
+header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: space-between;
+    background-color: var(--bg-panel);
+    border-bottom: 2px solid var(--border);
+    padding: 1rem 1.5rem;
+}
+.logo {
+    background: transparent;
+    border: 2px solid var(--accent-magenta);
+    width: 80px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+#re-switch {
+    width: 80px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid var(--accent-magenta);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#box {
+    margin-top: 2px;
+    margin-left: 8px;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    background-color: var(--accent-magenta);
+    border-radius: 1px;
+    cursor: pointer;
+    transition: background-color 0.7s;
+
+}
+
+#box.active {
+    background-color: #00e5ff;
+}
+
+.profile {
+    background: transparent;
+    border: 2px solid var(--accent-magenta);
+    width: 80px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    min-height: calc(100vh - 60px);
+}
+
+.timer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 3rem;
+    color: var(--accent-cyan);
+    text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+    letter-spacing: 0.05em;
+}
+
+.hidden {
+    display: none !important;
+}
+
+button {
+    border: 2px solid var(--accent-cyan);
+    background: transparent;
+    color: var(--accent-cyan);
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background: var(--accent-cyan);
+    color: var(--bg-void);
+}
+
