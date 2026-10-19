@@ -1,0 +1,1240 @@
+/* План обучения CAV — «острое стекло в стилистике cryzis»:
+   тёмный фиолетовый фон, стеклянные панели, неон, острые углы, HUD-уголки. */
+
+:root {
+    --bg: #09050f;
+    --violet: #a86bff;
+    --violet-hi: #cfaaff;
+    --cyan: #4deaff;
+    --pink: #ff5cb8;
+    --amber: #ffc56b;
+    --danger: #ff6b86;
+
+    --text: #f3eeff;
+    --muted: #bcb1d6;
+    --dim: #9488ae;
+
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-strong: rgba(255, 255, 255, 0.075);
+    --line: rgba(176, 116, 255, 0.38);
+    --line-soft: rgba(176, 116, 255, 0.18);
+    --glow: 0 0 22px rgba(168, 107, 255, 0.18);
+
+    --font-display: "Unbounded", system-ui, sans-serif;
+    --font-text: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Mono", "JetBrains Mono", Consolas, "Liberation Mono", monospace;
+
+    --radius: 2px;
+    --cut: 10px; /* размер срезанного угла у главных кнопок */
+
+    color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--bg);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.55 var(--font-text);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* Фон: неоновые пятна + еле заметная HUD-сетка (отдельный неподвижный слой) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(rgba(168, 107, 255, 0.055) 1px, transparent 1px) 0 0 / 40px 40px,
+        linear-gradient(90deg, rgba(168, 107, 255, 0.055) 1px, transparent 1px) 0 0 / 40px 40px,
+        radial-gradient(1100px 620px at 8% -12%, rgba(132, 64, 255, 0.32), transparent 62%),
+        radial-gradient(900px 560px at 105% 8%, rgba(255, 64, 170, 0.15), transparent 60%),
+        radial-gradient(900px 700px at 50% 115%, rgba(40, 210, 255, 0.10), transparent 62%);
+}
+
+.page {
+    position: relative;
+    z-index: 1;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+}
+
+h1, h2, h3, p, dl, dd, ol, ul {
+    margin: 0;
+}
+
+a {
+    color: var(--cyan);
+}
+
+button,
+input {
+    font: inherit;
+    color: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.small {
+    font-size: 13px;
+}
+
+/* ---------- Стеклянная панель с HUD-уголками ---------- */
+
+.panel {
+    position: relative;
+    background: var(--glass);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    box-shadow: var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+}
+
+.panel::before,
+.panel::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
+    border-color: var(--violet);
+    border-style: solid;
+    filter: drop-shadow(0 0 4px rgba(168, 107, 255, 0.8));
+}
+
+.panel::before {
+    top: -1px;
+    left: -1px;
+    border-width: 2px 0 0 2px;
+}
+
+.panel::after {
+    right: -1px;
+    bottom: -1px;
+    border-width: 0 2px 2px 0;
+}
+
+.panel-label,
+.section-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--violet-hi);
+}
+
+.panel-label::before,
+.section-title::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 10px;
+    background: var(--violet);
+    box-shadow: 0 0 10px var(--violet);
+    vertical-align: 1px;
+}
+
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 36px 0 14px;
+}
+
+/* ---------- Шапка ---------- */
+
+.top {
+    margin-bottom: 24px;
+}
+
+.top-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+}
+
+.back {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    text-decoration: none;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--glass);
+}
+
+.back:hover {
+    border-color: var(--violet);
+    box-shadow: 0 0 14px rgba(168, 107, 255, 0.35);
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    font-size: 12px;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    background: rgba(9, 5, 15, 0.55);
+    color: var(--muted);
+}
+
+.badge-on {
+    color: var(--cyan);
+    border-color: rgba(77, 234, 255, 0.45);
+}
+
+.badge-off {
+    color: var(--amber);
+    border-color: rgba(255, 197, 107, 0.4);
+}
+
+.dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.kicker {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 10px;
+}
+
+.title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(26px, 5.2vw, 46px);
+    line-height: 1.12;
+    letter-spacing: 0.005em;
+    color: #fff;
+    text-shadow: 0 0 28px rgba(168, 107, 255, 0.55);
+    overflow-wrap: anywhere;
+}
+
+.subtitle {
+    margin-top: 12px;
+    max-width: 760px;
+    font-size: 16px;
+    color: var(--muted);
+}
+
+.loading {
+    padding: 40px 0;
+    font-family: var(--font-mono);
+    color: var(--muted);
+}
+
+/* ---------- Кнопки ---------- */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 9px 16px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    line-height: 1.3;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text);
+    background: rgba(168, 107, 255, 0.1);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+    background: rgba(168, 107, 255, 0.2);
+    border-color: var(--violet);
+    box-shadow: 0 0 16px rgba(168, 107, 255, 0.3);
+}
+
+.btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* главная кнопка — заливка и срезанные углы */
+.btn-primary {
+    color: #fff;
+    border: 0;
+    background: linear-gradient(135deg, #b77bff, #7b3dff 60%, #c2459f);
+    clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+    text-shadow: 0 1px 2px rgba(20, 0, 40, 0.5);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #c896ff, #8d55ff 60%, #d75cb4);
+}
+
+/* clip-path обрезает outline, поэтому фокус рисуем внутри */
+.btn-primary:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--cyan), inset 0 0 0 4px #1a0d2e;
+}
+
+.btn-ghost {
+    background: transparent;
+}
+
+.btn-ghost.is-active {
+    border-color: var(--violet);
+    color: var(--violet-hi);
+}
+
+.btn-danger {
+    color: var(--danger);
+    border-color: rgba(255, 107, 134, 0.45);
+    background: transparent;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: rgba(255, 107, 134, 0.1);
+    border-color: var(--danger);
+    box-shadow: none;
+}
+
+.btn-small {
+    min-height: 32px;
+    padding: 5px 12px;
+}
+
+.btn-big {
+    min-height: 52px;
+    padding: 14px 22px;
+    font-size: 14px;
+}
+
+/* ---------- Сообщения сверху ---------- */
+
+.notices {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.notices:empty {
+    display: none;
+}
+
+.notice {
+    padding: 16px 18px;
+}
+
+.notice-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.notice-text {
+    color: var(--muted);
+}
+
+.notice-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.notice-create {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+    padding: 22px;
+    border-color: rgba(255, 92, 184, 0.5);
+    box-shadow: 0 0 34px rgba(255, 92, 184, 0.18), inset 0 0 40px rgba(168, 107, 255, 0.08);
+}
+
+.notice-create::before,
+.notice-create::after {
+    border-color: var(--pink);
+}
+
+.notice-create .notice-title {
+    font-size: 18px;
+}
+
+.notice-update {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-color: rgba(77, 234, 255, 0.45);
+}
+
+.notice-update::before,
+.notice-update::after {
+    border-color: var(--cyan);
+}
+
+.notice-error {
+    display: grid;
+    gap: 10px;
+    justify-items: start;
+    border-color: rgba(255, 107, 134, 0.55);
+}
+
+.notice-error::before,
+.notice-error::after {
+    border-color: var(--danger);
+}
+
+.notice-error .notice-text {
+    color: #ffd5dd;
+}
+
+.notice-info .notice-text {
+    color: var(--text);
+}
+
+.notice-muted {
+    padding: 10px 14px;
+    border-left: 2px solid var(--amber);
+    background: rgba(255, 197, 107, 0.06);
+}
+
+.notice-muted .notice-text {
+    font-size: 13px;
+}
+
+/* ---------- Полосы прогресса ---------- */
+
+.bar {
+    position: relative;
+    overflow: hidden;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 1px;
+}
+
+.bar-fill {
+    display: block;
+    width: var(--p, 0%);
+    height: 100%;
+    background: linear-gradient(90deg, var(--violet), var(--pink));
+    box-shadow: 0 0 10px rgba(168, 107, 255, 0.7);
+    transition: width 0.45s ease;
+}
+
+.bar-big {
+    height: 16px;
+    margin: 18px 0 14px;
+    border: 1px solid var(--line-soft);
+}
+
+/* деления-«засечки» поверх большой полосы */
+.bar-big::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg, transparent 0 calc(5% - 2px), rgba(9, 5, 15, 0.85) calc(5% - 2px) 5%);
+}
+
+.bar-job {
+    height: 8px;
+}
+
+.bar-job .bar-fill {
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+}
+
+.bar-track .bar-fill,
+.bar-mini .bar-fill {
+    background: var(--c, var(--violet));
+    box-shadow: 0 0 8px var(--c, var(--violet));
+}
+
+.bar-mini {
+    width: 90px;
+    height: 4px;
+}
+
+/* ---------- Обзор: прогресс + следующий шаг ---------- */
+
+/* слева прогресс и треки, справа следующий шаг; на узком экране — одной колонкой */
+.overview {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    grid-template-areas:
+        "progress next"
+        "tracks next";
+    align-items: start;
+    gap: 16px;
+}
+
+.overview:empty {
+    display: none;
+}
+
+.progress-panel,
+.next-panel,
+.tracks-panel {
+    padding: 20px;
+}
+
+.progress-panel {
+    grid-area: progress;
+}
+
+.next-panel {
+    grid-area: next;
+    align-self: stretch;
+}
+
+.tracks-panel {
+    grid-area: tracks;
+}
+
+.panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 30px;
+    margin-top: 18px;
+}
+
+.stat {
+    display: grid;
+    gap: 2px;
+}
+
+.stat-value {
+    font-size: clamp(19px, 2.4vw, 25px);
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.stat-accent .stat-value {
+    color: var(--violet-hi);
+    text-shadow: 0 0 16px rgba(168, 107, 255, 0.8);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.pace {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.pace-ontrack {
+    color: var(--violet-hi);
+}
+
+.pace-ahead {
+    color: var(--cyan);
+}
+
+.pace-behind {
+    color: var(--amber);
+}
+
+.next-panel {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    border-color: var(--line);
+}
+
+.next-stage {
+    margin-top: 6px;
+}
+
+.next-title {
+    font-family: var(--font-display);
+    font-size: clamp(17px, 2vw, 21px);
+    font-weight: 500;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.next-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.how {
+    color: #e2dbf3;
+    overflow-wrap: anywhere;
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    padding: 0;
+    list-style: none;
+}
+
+.links a {
+    font-size: 14px;
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(77, 234, 255, 0.35);
+}
+
+.links a::after {
+    content: " ↗";
+    font-size: 12px;
+}
+
+.links a:hover {
+    border-bottom-color: var(--cyan);
+    text-shadow: 0 0 10px rgba(77, 234, 255, 0.6);
+}
+
+.background {
+    display: grid;
+    gap: 8px;
+    margin-top: 6px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line-soft);
+}
+
+.background-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+}
+
+.background-list {
+    display: grid;
+    gap: 6px;
+    padding: 0;
+    list-style: none;
+}
+
+.background-item {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    padding: 6px 10px;
+    text-align: left;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 0;
+    border-left: 2px solid var(--c);
+    border-radius: 0;
+    cursor: pointer;
+}
+
+.background-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.background-stage {
+    flex: none;
+    min-width: 50px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    color: var(--c);
+    padding-top: 1px;
+}
+
+/* ---------- Треки ---------- */
+
+.track-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+    gap: 8px;
+}
+
+.track {
+    display: grid;
+    gap: 9px;
+    padding: 10px 12px;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--c);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.track:hover {
+    background: var(--glass-strong);
+}
+
+.track.is-active {
+    border-color: var(--c);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--c) 45%, transparent);
+}
+
+.track-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2px 8px;
+}
+
+.track-name {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--c);
+}
+
+/* ---------- Этапы ---------- */
+
+.stages .stage {
+    margin-bottom: 12px;
+}
+
+.stage.is-parallel {
+    background: rgba(77, 234, 255, 0.035);
+}
+
+.stage-summary {
+    display: grid;
+    gap: 8px;
+    padding: 14px 48px 14px 16px;
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+}
+
+.stage-summary::-webkit-details-marker {
+    display: none;
+}
+
+/* стрелка-шеврон справа */
+.stage-summary::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid var(--violet-hi);
+    border-bottom: 2px solid var(--violet-hi);
+    transform: rotate(45deg);
+    transition: transform 0.2s;
+}
+
+.stage[open] > .stage-summary::after {
+    transform: translateY(4px) rotate(-135deg);
+}
+
+.stage-summary:hover {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.stage-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+}
+
+.stage-code {
+    flex: none;
+    min-width: 44px;
+    padding: 3px 7px;
+    font-family: var(--font-display); /* в моноширинных шрифтах «Э» похожа на «3» */
+    font-size: 11px;
+    text-align: center;
+    color: var(--violet-hi);
+    border: 1px solid var(--line);
+}
+
+.stage.is-complete .stage-code {
+    color: #12081f;
+    background: var(--violet);
+    border-color: var(--violet);
+    box-shadow: 0 0 10px rgba(168, 107, 255, 0.7);
+}
+
+.stage-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.35;
+    flex: 1 1 260px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.stage-meta {
+    font-size: 13px;
+}
+
+.tag {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border: 1px solid;
+}
+
+.tag-parallel {
+    color: var(--cyan);
+    border-color: rgba(77, 234, 255, 0.5);
+}
+
+.stage-body {
+    padding: 4px 16px 16px;
+    border-top: 1px dashed var(--line-soft);
+}
+
+.stage-goal {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px 14px;
+    padding: 14px 0;
+}
+
+.stage-goal dt {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    padding-top: 4px;
+}
+
+.stage-goal dd {
+    color: var(--text);
+}
+
+.stage-total {
+    margin-top: 12px;
+}
+
+/* ---------- Пункты ---------- */
+
+.items {
+    display: grid;
+    gap: 2px;
+    padding: 0;
+    list-style: none;
+}
+
+.item {
+    border-left: 2px solid color-mix(in srgb, var(--c) 55%, transparent);
+    background: rgba(255, 255, 255, 0.015);
+}
+
+.item-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 10px 10px 12px;
+}
+
+.item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.item-main {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 6px;
+    padding: 0;
+    text-align: left;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+.item-title {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.item.is-done .item-title {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: rgba(168, 107, 255, 0.7);
+}
+
+.item.is-doing {
+    background: rgba(255, 197, 107, 0.05);
+}
+
+/* галочка: нативный checkbox со своей отрисовкой */
+.check {
+    appearance: none;
+    -webkit-appearance: none;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    border: 1.5px solid rgba(207, 170, 255, 0.65);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.04) center / 14px 14px no-repeat;
+    cursor: pointer;
+    transition: background-color 0.15s, box-shadow 0.15s;
+}
+
+.check:hover:not(:disabled) {
+    border-color: var(--violet-hi);
+    box-shadow: 0 0 10px rgba(168, 107, 255, 0.5);
+}
+
+.check:checked {
+    border-color: var(--violet);
+    background-color: var(--violet);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3.2 3L13 4.5' fill='none' stroke='%23140a24' stroke-width='2.6'/%3E%3C/svg%3E");
+    box-shadow: 0 0 12px rgba(168, 107, 255, 0.65);
+}
+
+.check:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* засчитано на уроке — галочка стоит, но заблокирована */
+.item.is-locked .check {
+    opacity: 0.85;
+    border-style: dashed;
+    border-color: var(--cyan);
+    background-color: rgba(77, 234, 255, 0.55);
+    box-shadow: none;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chip {
+    display: inline-block;
+    padding: 1px 7px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--radius);
+    white-space: nowrap;
+}
+
+.chip-track {
+    color: var(--c);
+    border-color: color-mix(in srgb, var(--c) 50%, transparent);
+}
+
+.type-cav {
+    color: var(--pink);
+    border-color: rgba(255, 92, 184, 0.45);
+}
+
+.type-practice {
+    color: var(--cyan);
+    border-color: rgba(77, 234, 255, 0.4);
+}
+
+.type-learn {
+    color: var(--violet-hi);
+    border-color: var(--line);
+}
+
+.chip-date.is-overdue {
+    color: var(--danger);
+    border-color: rgba(255, 107, 134, 0.6);
+}
+
+.chip-doing {
+    color: var(--amber);
+    border-color: rgba(255, 197, 107, 0.55);
+}
+
+.chip-lesson {
+    color: #e8dcff;
+    background: rgba(168, 107, 255, 0.22);
+    border-color: var(--line);
+}
+
+.chip-hours {
+    color: var(--cyan);
+    border-color: rgba(77, 234, 255, 0.35);
+}
+
+.item-details {
+    display: grid;
+    gap: 10px;
+    padding: 0 12px 14px 46px;
+}
+
+/* ---------- Самопроверка ---------- */
+
+.selfcheck {
+    margin-top: 14px;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+}
+
+.selfcheck > summary {
+    padding: 10px 14px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--cyan);
+    cursor: pointer;
+}
+
+.selfcheck ol {
+    display: grid;
+    gap: 8px;
+    padding: 0 16px 14px 36px;
+}
+
+/* ---------- Журнал уроков ---------- */
+
+.lessons {
+    display: grid;
+    padding: 6px 18px;
+    list-style: none;
+}
+
+.lesson {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 6px 16px;
+    padding: 14px 0;
+}
+
+.lesson + .lesson {
+    border-top: 1px dashed var(--line-soft);
+}
+
+.lesson-date {
+    font-size: 13px;
+    color: var(--cyan);
+    padding-top: 2px;
+}
+
+.lesson-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.lesson-note {
+    color: var(--muted);
+}
+
+/* ---------- Подвал ---------- */
+
+.footer {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 12px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line-soft);
+}
+
+.footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ---------- Всплывающее уведомление ---------- */
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    z-index: 10;
+    max-width: min(560px, calc(100vw - 32px));
+    padding: 12px 16px;
+    color: var(--text);
+    background: rgba(20, 11, 34, 0.92);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 0 24px rgba(168, 107, 255, 0.3);
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+}
+
+.toast.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.toast[data-kind="ok"] {
+    border-color: rgba(77, 234, 255, 0.6);
+}
+
+.toast[data-kind="error"] {
+    border-color: var(--danger);
+}
+
+.noscript {
+    position: relative;
+    z-index: 1;
+    padding: 24px;
+    text-align: center;
+}
+
+/* ---------- Адаптив ---------- */
+
+@media (max-width: 860px) {
+    .overview {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "progress" "next" "tracks";
+    }
+}
+
+@media (max-width: 560px) {
+    .page {
+        padding-top: 16px;
+    }
+
+    .top-nav {
+        margin-bottom: 18px;
+    }
+
+    .badges {
+        margin-left: 0;
+    }
+
+    .progress-panel,
+    .next-panel,
+    .tracks-panel,
+    .notice-create {
+        padding: 16px;
+    }
+
+    .stage-summary {
+        padding: 12px 40px 12px 12px;
+    }
+
+    .stage-summary::after {
+        right: 16px;
+    }
+
+    .stage-body {
+        padding: 4px 10px 12px;
+    }
+
+    .stage-goal {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+
+    .stage-goal dd + dt {
+        margin-top: 8px;
+    }
+
+    .item-row {
+        gap: 10px;
+        padding: 10px 8px;
+    }
+
+    .item-details {
+        padding: 0 8px 12px 40px;
+    }
+
+    .lesson {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-big {
+        width: 100%;
+        font-size: 13px;
+    }
+}
+
+/* Меньше движения — без анимаций и плавной прокрутки */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
+    }
+}

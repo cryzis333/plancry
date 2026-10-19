@@ -1,0 +1,2298 @@
+{
+  "version": 2,
+  "updated": "2026-10-19",
+  "title": "Обучение: мессенджер CAV",
+  "subtitle": "Rust + базы данных + Linux-сервер, по ходу — JS, HTML, CSS. Сроки — в темпе ~16 ч в неделю",
+  "tracks": {
+    "rust": {
+      "name": "Rust",
+      "color": "#d0743c"
+    },
+    "db": {
+      "name": "Базы данных",
+      "color": "#3c7fd0"
+    },
+    "linux": {
+      "name": "Linux / сервер",
+      "color": "#3f9b5a"
+    },
+    "web": {
+      "name": "Веб и HTTP",
+      "color": "#8a5cc9"
+    },
+    "sec": {
+      "name": "Безопасность",
+      "color": "#c94a5c"
+    },
+    "js": {
+      "name": "JavaScript",
+      "color": "#c9a227"
+    },
+    "front": {
+      "name": "HTML / CSS",
+      "color": "#2ea3a3"
+    },
+    "git": {
+      "name": "Git",
+      "color": "#7a7a7a"
+    }
+  },
+  "types": {
+    "learn": "теория",
+    "practice": "упражнение",
+    "cav": "CAV"
+  },
+  "stages": [
+    {
+      "id": "start",
+      "title": "Старт. Что уже сделано",
+      "weeks": "готово",
+      "goal": "Зафиксировать, с чего начинаем",
+      "result": "Есть репозиторий, формы входа/регистрации, решения по архитектуре и план",
+      "items": [
+        {
+          "id": "start-repo",
+          "track": "git",
+          "type": "cav",
+          "done": true,
+          "title": "Репозиторий CAV: backend (cargo) + frontend, ветки main и develop",
+          "how": "backend/ — Rust-крейт, frontend/ — статичные страницы. Работаем в develop, в main попадает готовое через PR #1.",
+          "h": 1,
+          "priority": "high",
+          "deadline": "2026-10-19",
+          "order": 0
+        },
+        {
+          "id": "start-html",
+          "track": "front",
+          "type": "cav",
+          "done": true,
+          "title": "auth.html: формы регистрации и входа на <form> с name у полей",
+          "how": "Переход с div + p на настоящие <form>. У полей name — поэтому в JS работает form.elements.email.",
+          "h": 3,
+          "priority": "high",
+          "deadline": "2026-10-19",
+          "order": 0
+        },
+        {
+          "id": "start-js",
+          "track": "js",
+          "type": "cav",
+          "done": true,
+          "title": "auth.js: проверки, уведомления createNotification, fetch POST /api/register",
+          "how": "submit + preventDefault, сбор данных, JSON.stringify, fetch, res.ok. Сервер пока не отвечает — это этап 1.",
+          "h": 4,
+          "priority": "high",
+          "deadline": "2026-10-19",
+          "order": 0
+        },
+        {
+          "id": "start-arch",
+          "track": "web",
+          "type": "learn",
+          "done": true,
+          "title": "Архитектура решена: один axum-сервер на :3000 отдаёт и API, и фронт",
+          "how": "Из диалога «Разметка в auth HTML»: SQLite + sqlx-миграции (весь SQL в db.rs), bcrypt для паролей, JWT в httpOnly-cookie, после входа — app.html. CORS и Live Server не нужны.",
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2026-10-19",
+          "order": 0
+        },
+        {
+          "id": "start-merge",
+          "track": "git",
+          "type": "cav",
+          "done": true,
+          "title": "Ветка feature/first-server влита в develop",
+          "how": "Осталось удалить её на GitHub и у себя (этап 0).",
+          "h": 0.5,
+          "priority": "high",
+          "deadline": "2026-10-19",
+          "order": 0
+        },
+        {
+          "id": "start-plan",
+          "track": "git",
+          "type": "learn",
+          "done": true,
+          "title": "Составлен план обучения и подключён к plancry",
+          "how": "Ты сейчас на него смотришь :)",
+          "h": 0,
+          "priority": "medium",
+          "deadline": "2026-10-19",
+          "order": 0
+        }
+      ],
+      "check": [],
+      "code": "Старт"
+    },
+    {
+      "id": "s0",
+      "title": "Этап 0. Инструменты и хвосты",
+      "weeks": "1–2 дня",
+      "goal": "Чистый develop, удобное окружение, git без страха",
+      "result": "Исправления фронта в develop, лишняя ветка удалена, Rust и git работают в WSL",
+      "items": [
+        {
+          "id": "s0-push",
+          "track": "git",
+          "type": "cav",
+          "title": "Запушить исправления auth.html / auth.js в develop",
+          "how": "В develop всё ещё includes('@'), alert на 43-й строке, нет novalidate и required, у секции входа class=\"form-login\" id=\"Login\" как у формы. Ты писала, что исправила, — но в GitHub этого нет. Проверка: git status, git log origin/develop..HEAD.",
+          "h": 1,
+          "priority": "high",
+          "deadline": "2026-10-21",
+          "order": 1
+        },
+        {
+          "id": "s0-branches",
+          "track": "git",
+          "type": "cav",
+          "title": "Удалить feature/first-server на GitHub и у себя",
+          "how": "git push origin --delete feature/first-server, потом git branch -d feature/first-server и git fetch --prune. Понять, почему -d не удалит невлитую ветку, а -D удалит.",
+          "links": [
+            [
+              "Learn Git Branching (RU)",
+              "https://learngitbranching.js.org/?locale=ru_RU"
+            ],
+            [
+              "Pro Git, гл. 3 — ветвление",
+              "https://git-scm.com/book/ru/v2"
+            ]
+          ],
+          "h": 0.5,
+          "priority": "high",
+          "deadline": "2026-10-21",
+          "order": 2
+        },
+        {
+          "id": "s0-git-flow",
+          "track": "git",
+          "type": "learn",
+          "title": "Git: develop → main через PR, маленькие осмысленные коммиты",
+          "how": "Что такое PR #1 (develop → main) и когда его мержить. Зачем в .gitignore target/, .env, *.db. Сообщение коммита: что и зачем.",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-10-22",
+          "order": 3
+        },
+        {
+          "id": "s0-wsl",
+          "track": "linux",
+          "type": "practice",
+          "title": "WSL2 + Ubuntu на Windows, VS Code через WSL",
+          "how": "wsl --install, в Ubuntu поставить rustup и git, склонировать CAV в домашнюю папку (~/), а не в /mnt/c — так быстрее. Открывать проект командой code . из WSL. Так Linux будет рядом каждый день.",
+          "links": [
+            [
+              "Установка WSL",
+              "https://learn.microsoft.com/ru-ru/windows/wsl/install"
+            ],
+            [
+              "VS Code + WSL",
+              "https://code.visualstudio.com/docs/remote/wsl"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-10-23",
+          "order": 5
+        },
+        {
+          "id": "s0-terminal",
+          "track": "linux",
+          "type": "learn",
+          "title": "Терминал: pwd, ls -la, cd, mkdir, touch, cp, mv, rm, cat, less, man",
+          "how": "Плюс Tab для автодополнения, стрелки и Ctrl+R для истории, --help у любой команды.",
+          "links": [
+            [
+              "Linux Journey",
+              "https://linuxjourney.com/"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-10-24",
+          "order": 6
+        },
+        {
+          "id": "s0-cargo",
+          "track": "rust",
+          "type": "learn",
+          "title": "Инструменты Rust: cargo add / check / run / fmt / clippy, rust-analyzer",
+          "how": "cargo check — быстрая проверка без сборки, clippy — подсказки. Привычка: читать ошибку компилятора целиком, там почти всегда написан ответ.",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-10-24",
+          "order": 7
+        }
+      ],
+      "check": [
+        "Чем git merge отличается от git rebase (на пальцах)?",
+        "Как проверить, что твои коммиты реально ушли на GitHub?",
+        "Что делает cargo check и чем он отличается от cargo build?"
+      ],
+      "code": "Э0"
+    },
+    {
+      "id": "s1",
+      "title": "Этап 1. Сервер оживает (шаг 1)",
+      "weeks": "2–4 дня",
+      "goal": "main.rs написан руками: сервер отдаёт фронтенд и отвечает на /api/health",
+      "result": "localhost:3000/api/health → ok, localhost:3000/auth.html открывается, форма получает ответ от сервера",
+      "items": [
+        {
+          "id": "s1-http",
+          "track": "web",
+          "type": "learn",
+          "title": "HTTP: запрос и ответ, методы, коды 200/201/400/401/404/405/409/500, заголовки, JSON",
+          "how": "Открыть DevTools → Network и разобрать один запрос: метод, URL, заголовки, тело, код ответа.",
+          "links": [
+            [
+              "MDN: обзор HTTP",
+              "https://developer.mozilla.org/ru/docs/Web/HTTP/Overview"
+            ],
+            [
+              "MDN: коды ответа",
+              "https://developer.mozilla.org/ru/docs/Web/HTTP/Status"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-10-25",
+          "order": 8
+        },
+        {
+          "id": "s1-async",
+          "track": "rust",
+          "type": "learn",
+          "title": "async/await и tokio: зачем #[tokio::main], что делает .await, что значит .unwrap()",
+          "how": "Без рантайма async fn main не запустится. Без .await асинхронная операция просто не выполнится.",
+          "links": [
+            [
+              "Tokio tutorial",
+              "https://tokio.rs/tokio/tutorial"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-10-26",
+          "order": 10
+        },
+        {
+          "id": "s1-axum",
+          "track": "rust",
+          "type": "learn",
+          "title": "axum из 4 частей: обработчик, Router, TcpListener, axum::serve",
+          "how": "Обработчик — обычная async fn, что вернёт — то и получит клиент. Почему маршрут с get() отвечает 405 на POST.",
+          "links": [
+            [
+              "Документация axum",
+              "https://docs.rs/axum/latest/axum/"
+            ],
+            [
+              "Примеры axum",
+              "https://github.com/tokio-rs/axum/tree/main/examples"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-10-27",
+          "order": 12
+        },
+        {
+          "id": "s1-health",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: cargo add tower-http --features fs, main.rs руками, GET /api/health → ok",
+          "how": "Код разобран в диалоге «Разметка в auth HTML». Набрать руками, не копипастой. Запуск: cargo run из backend/.",
+          "h": 2,
+          "priority": "high",
+          "deadline": "2026-10-29",
+          "order": 14
+        },
+        {
+          "id": "s1-static",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: .fallback_service(ServeDir::new(\"../frontend\")), открыть localhost:3000/auth.html",
+          "how": "Путь считается от папки, где запущен cargo run. Live Server больше не нужен: страницу отдаёт твой сервер. Форма регистрации должна показать «registration failed» (405) — связка работает.",
+          "links": [
+            [
+              "ServeDir",
+              "https://docs.rs/tower-http/latest/tower_http/services/struct.ServeDir.html"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "high",
+          "deadline": "2026-10-31",
+          "order": 16
+        },
+        {
+          "id": "s1-mod",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: подключить auth.rs через mod auth; и добиться cargo check без предупреждений",
+          "how": "Файл в src/ не компилируется, пока его не объявили модулем.",
+          "h": 0.5,
+          "priority": "high",
+          "deadline": "2026-11-01",
+          "order": 18
+        },
+        {
+          "id": "s1-curl",
+          "track": "web",
+          "type": "practice",
+          "title": "curl: проверить сервер без браузера (curl -i localhost:3000/api/health)",
+          "how": "Потом так же POST с JSON: curl -i -X POST -H 'Content-Type: application/json' -d '{\"email\":\"a@b.c\"}' localhost:3000/api/register",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-11-02",
+          "order": 20
+        },
+        {
+          "id": "s1-trace",
+          "track": "rust",
+          "type": "practice",
+          "title": "Логи запросов: tracing + tracing-subscriber + TraceLayer",
+          "how": "По желанию: чтобы в терминале было видно каждый запрос — метод, путь, код.",
+          "links": [
+            [
+              "tower-http trace",
+              "https://docs.rs/tower-http/latest/tower_http/trace/index.html"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-03",
+          "order": 22
+        }
+      ],
+      "check": [
+        "Что будет, если вызвать async fn и не написать .await?",
+        "Почему POST на /api/health вернёт 405, а не 404?",
+        "Почему fetch('/api/register') работает, когда auth.html открыт с твоего сервера, и не работает при открытии файла двойным кликом?",
+        "Что значит 127.0.0.1:3000 и откуда до него можно достучаться?"
+      ],
+      "code": "Э1"
+    },
+    {
+      "id": "rs",
+      "title": "Rust-фундамент (параллельно, понемногу каждый день)",
+      "weeks": "идёт фоном с этапа 1 до этапа 6",
+      "goal": "Читать и писать обычный Rust без паники от borrow checker",
+      "result": "Rustlings пройден, validate.rs с тестами работает в CAV",
+      "parallel": true,
+      "items": [
+        {
+          "id": "rs-basics",
+          "track": "rust",
+          "type": "learn",
+          "title": "Переменные, mut, shadowing, типы, функции, выражения vs инструкции",
+          "how": "Почему последняя строка без ; — это возвращаемое значение. Нужно уже к этапу 1.",
+          "links": [
+            [
+              "Книга, гл. 3",
+              "https://doc.rust-lang.ru/book/ch03-00-common-programming-concepts.html"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-10-28",
+          "order": 13
+        },
+        {
+          "id": "rs-own",
+          "track": "rust",
+          "type": "learn",
+          "title": "Ownership: move, Copy, clone, drop",
+          "how": "Руками 3 примера: передать String в функцию и использовать после; то же с i32; то же с .clone(). До компиляции предсказать, где будет ошибка.",
+          "links": [
+            [
+              "Книга, гл. 4.1",
+              "https://doc.rust-lang.ru/book/ch04-01-what-is-ownership.html"
+            ]
+          ],
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2026-10-31",
+          "order": 15
+        },
+        {
+          "id": "rs-borrow",
+          "track": "rust",
+          "type": "learn",
+          "title": "Заимствование: &, &mut, «много читателей или один писатель», срезы, String vs &str",
+          "how": "Почему функции лучше принимать &str, а не String. Нужно к этапу 2.",
+          "links": [
+            [
+              "Книга, гл. 4.2",
+              "https://doc.rust-lang.ru/book/ch04-02-references-and-borrowing.html"
+            ],
+            [
+              "Книга, гл. 4.3",
+              "https://doc.rust-lang.ru/book/ch04-03-slices.html"
+            ]
+          ],
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2026-11-07",
+          "order": 26
+        },
+        {
+          "id": "rs-struct",
+          "track": "rust",
+          "type": "learn",
+          "title": "struct, impl, методы (&self, &mut self), ассоциированные функции (new)",
+          "how": "struct RegisterRequest из этапа 3 — это просто struct с derive.",
+          "links": [
+            [
+              "Книга, гл. 5",
+              "https://doc.rust-lang.ru/book/ch05-00-structs.html"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-11-10",
+          "order": 29
+        },
+        {
+          "id": "rs-enum",
+          "track": "rust",
+          "type": "learn",
+          "title": "enum, match, if let, Option<T> вместо null",
+          "how": "Главная суперсила Rust. enum с данными в вариантах, исчерпывающий match.",
+          "links": [
+            [
+              "Книга, гл. 6",
+              "https://doc.rust-lang.ru/book/ch06-00-enums.html"
+            ]
+          ],
+          "h": 2.5,
+          "priority": "medium",
+          "deadline": "2026-11-12",
+          "order": 32
+        },
+        {
+          "id": "rs-result",
+          "track": "rust",
+          "type": "learn",
+          "title": "Result<T, E>, оператор ?, когда unwrap / expect допустимы",
+          "how": "Свой enum ошибки, проброс через ?. Нужно к этапу 3 (AppError).",
+          "links": [
+            [
+              "Книга, гл. 9",
+              "https://doc.rust-lang.ru/book/ch09-00-error-handling.html"
+            ]
+          ],
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2026-11-23",
+          "order": 46
+        },
+        {
+          "id": "rs-coll",
+          "track": "rust",
+          "type": "learn",
+          "title": "Коллекции: Vec, HashMap, String; итераторы и замыкания",
+          "how": ".iter().filter().map().collect() — переписать пару циклов for на итераторы.",
+          "links": [
+            [
+              "Книга, гл. 8",
+              "https://doc.rust-lang.ru/book/ch08-00-common-collections.html"
+            ],
+            [
+              "Книга, гл. 13",
+              "https://doc.rust-lang.ru/book/ch13-00-functional-features.html"
+            ]
+          ],
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2026-11-25",
+          "order": 48
+        },
+        {
+          "id": "rs-mod",
+          "track": "rust",
+          "type": "learn",
+          "title": "Модули: mod, pub, use, разнесение по файлам (main.rs, auth.rs, db.rs)",
+          "how": "Что значит pub у функции и у поля struct. crate:: и super::.",
+          "links": [
+            [
+              "Книга, гл. 7",
+              "https://doc.rust-lang.ru/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-28",
+          "order": 50
+        },
+        {
+          "id": "rs-traits",
+          "track": "rust",
+          "type": "learn",
+          "title": "Трейты: Debug, Clone, Display, #[derive], impl Trait",
+          "how": "Реализовать Display для своей ошибки. Понять, что IntoResponse в axum — тоже трейт.",
+          "links": [
+            [
+              "Книга, гл. 10.2",
+              "https://doc.rust-lang.ru/book/ch10-02-traits.html"
+            ]
+          ],
+          "h": 2.5,
+          "priority": "medium",
+          "deadline": "2026-12-08",
+          "order": 63
+        },
+        {
+          "id": "rs-tests",
+          "track": "rust",
+          "type": "learn",
+          "title": "Тесты: #[test], assert_eq!, assert!(matches!(..)), cargo test",
+          "how": "Хороший тест проверяет и успех, и каждую ошибку.",
+          "links": [
+            [
+              "Книга, гл. 11",
+              "https://doc.rust-lang.ru/book/ch11-00-testing.html"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-12-11",
+          "order": 66
+        },
+        {
+          "id": "rs-rustlings1",
+          "track": "rust",
+          "type": "practice",
+          "title": "Rustlings: от variables до enums",
+          "how": "Маленькие задачки, которые чинишь, пока не скомпилируется. Сначала прочитать ошибку, потом hint.",
+          "links": [
+            [
+              "Rustlings",
+              "https://github.com/rust-lang/rustlings"
+            ]
+          ],
+          "h": 6,
+          "priority": "medium",
+          "deadline": "2026-12-15",
+          "order": 68
+        },
+        {
+          "id": "rs-rustlings2",
+          "track": "rust",
+          "type": "practice",
+          "title": "Rustlings: strings, modules, hashmaps, options, error_handling, traits, tests",
+          "how": "Если раздел даётся тяжело — вернуться к главе книги и спросить меня.",
+          "links": [
+            [
+              "Rustlings",
+              "https://github.com/rust-lang/rustlings"
+            ]
+          ],
+          "h": 8,
+          "priority": "medium",
+          "deadline": "2027-01-04",
+          "order": 82
+        },
+        {
+          "id": "rs-2048",
+          "track": "rust",
+          "type": "practice",
+          "title": "2048: продолжить свой LEARNING_PLAN.md с этапа 1 (slide_row_left)",
+          "how": "Чистый Rust без веба: Vec, срезы, &mut, Option, тесты по таблице «вход → выход». Альтернатива Rustlings — можно чередовать.",
+          "h": 10,
+          "priority": "medium",
+          "deadline": "2027-01-10",
+          "order": 85
+        },
+        {
+          "id": "rs-validate",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: validate.rs — fn validate_register(..) -> Result<(), RegisterError> + тесты",
+          "how": "enum RegisterError { InvalidEmail, ShortUsername, WeakPassword }. Тест на каждую ошибку. Пригодится в этапе 3 — сервер проверяет данные сам, не доверяя JS.",
+          "h": 3,
+          "priority": "high",
+          "deadline": "2027-01-18",
+          "order": 89
+        }
+      ],
+      "check": [
+        "Почему после let b = a; (где a: String) нельзя использовать a, а с i32 можно?",
+        "Сколько &mut-ссылок на одно значение может быть одновременно? А & -ссылок?",
+        "Чем Option отличается от Result и когда что возвращать?",
+        "Что делает оператор ? и в каких функциях его можно писать?"
+      ],
+      "code": "Rust"
+    },
+    {
+      "id": "lx",
+      "title": "Linux-основа (параллельно, 20–30 минут в день)",
+      "weeks": "идёт фоном с этапа 0 до этапа 8",
+      "goal": "Уверенно жить в терминале — к деплою это должно стать привычкой",
+      "result": "Bandit пройден до 20 уровня, есть свой bash-скрипт, ssh по ключу",
+      "parallel": true,
+      "items": [
+        {
+          "id": "lx-fhs",
+          "track": "linux",
+          "type": "learn",
+          "title": "Файловая система: /, /home, /etc, /var/log, /usr/bin, /tmp",
+          "how": "Где конфиги (/etc), логи (/var/log), программы (/usr/bin). Абсолютные и относительные пути, ~ и ..",
+          "links": [
+            [
+              "Linux Journey",
+              "https://linuxjourney.com/"
+            ]
+          ],
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-10-22",
+          "order": 4
+        },
+        {
+          "id": "lx-perms",
+          "track": "linux",
+          "type": "learn",
+          "title": "Права: rwx, chmod 644 / 755 / 600, chown, пользователи и группы, sudo",
+          "how": "Прочитать вывод ls -l. Почему .env должен быть 600. Зачем сервису отдельный пользователь.",
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-10-26",
+          "order": 9
+        },
+        {
+          "id": "lx-proc",
+          "track": "linux",
+          "type": "learn",
+          "title": "Процессы: ps aux, htop, kill, SIGTERM и SIGKILL, &, jobs, fg",
+          "how": "Запустить cargo run, найти процесс, остановить по-хорошему (SIGTERM) и по-плохому (SIGKILL).",
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-10-27",
+          "order": 11
+        },
+        {
+          "id": "lx-pipes",
+          "track": "linux",
+          "type": "learn",
+          "title": "Потоки и пайпы: stdin/stdout/stderr, >, >>, 2>&1, |, grep, wc, sort, uniq, head, tail -f",
+          "how": "Пример: cargo build 2>&1 | grep warning | wc -l — посчитать предупреждения.",
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-11-05",
+          "order": 24
+        },
+        {
+          "id": "lx-find",
+          "track": "linux",
+          "type": "learn",
+          "title": "Поиск: find, grep -rn, which",
+          "how": "Найти все .rs файлы, найти, где в проекте используется Router.",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-11-20",
+          "order": 42
+        },
+        {
+          "id": "lx-apt",
+          "track": "linux",
+          "type": "learn",
+          "title": "Пакеты: apt update / upgrade / install / remove / search",
+          "how": "Поставить htop, sqlite3, curl, jq. Чем update отличается от upgrade.",
+          "h": 0.5,
+          "priority": "medium",
+          "deadline": "2026-11-21",
+          "order": 44
+        },
+        {
+          "id": "lx-editor",
+          "track": "linux",
+          "type": "practice",
+          "title": "Редакторы в терминале: nano уверенно, vim — выжить (i, Esc, :wq, :q!)",
+          "how": "На сервере не будет VS Code.",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-12-04",
+          "order": 59
+        },
+        {
+          "id": "lx-env",
+          "track": "linux",
+          "type": "learn",
+          "title": "Переменные окружения: env, export, PATH, ~/.bashrc",
+          "how": "Почему cargo находится после установки rustup (PATH). Как .env попадает в программу (dotenvy).",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-12-05",
+          "order": 61
+        },
+        {
+          "id": "lx-bash",
+          "track": "linux",
+          "type": "practice",
+          "title": "Bash-скрипт: shebang, переменные, if, for, $1, chmod +x",
+          "how": "backup.sh: копирует файл базы в backups/ с датой в имени.",
+          "h": 2.5,
+          "priority": "medium",
+          "deadline": "2026-12-27",
+          "order": 78
+        },
+        {
+          "id": "lx-net",
+          "track": "linux",
+          "type": "learn",
+          "title": "Сеть: ip a, ping, curl -I, ss -tulpn, dig, /etc/hosts, порты",
+          "how": "Запустить CAV и найти его порт через ss -tulpn. Чем 127.0.0.1 отличается от 0.0.0.0.",
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-01-24",
+          "order": 94
+        },
+        {
+          "id": "lx-ssh",
+          "track": "linux",
+          "type": "practice",
+          "title": "SSH: ssh-keygen -t ed25519, ssh-copy-id, ~/.ssh/config, scp, rsync",
+          "how": "Подключить ssh-ключ к GitHub и пушить по ssh. Тот же навык нужен для VPS.",
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2027-02-03",
+          "order": 100
+        },
+        {
+          "id": "lx-bandit1",
+          "track": "linux",
+          "type": "practice",
+          "title": "OverTheWire Bandit: уровни 0–10",
+          "how": "Игра в терминале через ssh. Записывать, что выучила на каждом уровне.",
+          "links": [
+            [
+              "Bandit",
+              "https://overthewire.org/wargames/bandit/"
+            ]
+          ],
+          "h": 5,
+          "priority": "medium",
+          "deadline": "2027-02-11",
+          "order": 105
+        },
+        {
+          "id": "lx-bandit2",
+          "track": "linux",
+          "type": "practice",
+          "title": "OverTheWire Bandit: уровни 11–20",
+          "how": "base64, tr, архивы, ssh-ключи, порты, nc, cron — всё пригодится на сервере.",
+          "links": [
+            [
+              "Bandit",
+              "https://overthewire.org/wargames/bandit/"
+            ]
+          ],
+          "h": 7,
+          "priority": "medium",
+          "deadline": "2027-02-17",
+          "order": 109
+        }
+      ],
+      "check": [
+        "Что значит chmod 750 и кому что разрешено?",
+        "Чем SIGTERM отличается от SIGKILL и почему сервер лучше гасить первым?",
+        "Сервер слушает 127.0.0.1:3000. Можно ли достучаться до него с другого компьютера? А если 0.0.0.0:3000?",
+        "Что выведет: echo hi > a.txt; echo yo >> a.txt; cat a.txt | wc -l ?"
+      ],
+      "code": "Linux"
+    },
+    {
+      "id": "s2",
+      "title": "Этап 2. SQL, SQLite и sqlx (шаг 2)",
+      "weeks": "1–1,5 недели",
+      "goal": "Понимать реляционные базы; таблица users создаётся миграцией",
+      "result": "При запуске сервер сам создаёт базу и таблицу users, весь SQL — в db.rs",
+      "items": [
+        {
+          "id": "s2-model",
+          "track": "db",
+          "type": "learn",
+          "title": "Реляционная модель: таблица, строка, столбец, первичный ключ, типы в SQLite",
+          "how": "В SQLite типы «мягкие» (type affinity) — в Postgres будет строже.",
+          "links": [
+            [
+              "SQLite: типы данных",
+              "https://www.sqlite.org/datatype3.html"
+            ]
+          ],
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-11-04",
+          "order": 23
+        },
+        {
+          "id": "s2-cli",
+          "track": "db",
+          "type": "practice",
+          "title": "sqlite3 в терминале: .open, .tables, .schema, .headers on, .mode box",
+          "how": "Открыть plancry.db из своего plancry и посмотреть таблицы, которые создали миграции.",
+          "links": [
+            [
+              "SQLite CLI",
+              "https://www.sqlite.org/cli.html"
+            ]
+          ],
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-11-05",
+          "order": 25
+        },
+        {
+          "id": "s2-crud",
+          "track": "db",
+          "type": "learn",
+          "title": "SQL: CREATE TABLE, INSERT, SELECT, WHERE, ORDER BY, LIMIT, UPDATE, DELETE",
+          "how": "Руками в sqlite3: таблица users, 3 строки, выбрать, обновить, удалить.",
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-11-07",
+          "order": 27
+        },
+        {
+          "id": "s2-sqlbolt",
+          "track": "db",
+          "type": "practice",
+          "title": "SQLBolt: уроки 1–18",
+          "how": "Задачки по SQL прямо в браузере. Уроки 6–7 (JOIN) особенно важны для чатов.",
+          "links": [
+            [
+              "SQLBolt",
+              "https://sqlbolt.com/"
+            ]
+          ],
+          "h": 5,
+          "priority": "medium",
+          "deadline": "2026-11-10",
+          "order": 28
+        },
+        {
+          "id": "s2-constraints",
+          "track": "db",
+          "type": "learn",
+          "title": "Ограничения: NOT NULL, UNIQUE, CHECK, DEFAULT",
+          "how": "Почему UNIQUE должен быть в базе, а не только проверкой в коде: два одновременных запроса пройдут проверку оба.",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-11-11",
+          "order": 30
+        },
+        {
+          "id": "s2-keys",
+          "track": "db",
+          "type": "learn",
+          "title": "Почему ключ — id, а не email (твой вопрос из диалога)",
+          "how": "Email можно сменить, а id — нет; на id ссылаются другие таблицы (сообщения, участники чатов). Нормализация на пальцах: не дублировать данные.",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-11-11",
+          "order": 31
+        },
+        {
+          "id": "s2-sqlx",
+          "track": "db",
+          "type": "learn",
+          "title": "sqlx: пул SqlitePool, query / query_as, .bind(), FromRow",
+          "how": "Параметры — только через bind: это защита от SQL-инъекций. Никогда не склеивать SQL через format!.",
+          "links": [
+            [
+              "sqlx",
+              "https://github.com/launchbadge/sqlx"
+            ]
+          ],
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2026-11-14",
+          "order": 33
+        },
+        {
+          "id": "s2-migrate",
+          "track": "db",
+          "type": "learn",
+          "title": "Миграции: sqlx migrate add / run, sqlx::migrate!() при старте",
+          "how": "Миграция — файл с изменением схемы, применяется один раз. Старые файлы не трогаем — любое изменение = новый файл. Как в твоём plancry.",
+          "links": [
+            [
+              "sqlx-cli",
+              "https://github.com/launchbadge/sqlx/blob/main/sqlx-cli/README.md"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-11-15",
+          "order": 35
+        },
+        {
+          "id": "s2-users",
+          "track": "db",
+          "type": "cav",
+          "title": "CAV: migrations/0001_create_users.sql (id, email UNIQUE, username UNIQUE, password_hash, created_at)",
+          "how": "Пул создаётся в main и передаётся в Router через .with_state(pool).",
+          "h": 2,
+          "priority": "high",
+          "deadline": "2026-11-16",
+          "order": 36
+        },
+        {
+          "id": "s2-dbrs",
+          "track": "db",
+          "type": "cav",
+          "title": "CAV: db.rs — все SQL-запросы в одном месте",
+          "how": "fn create_user(..), fn find_user_by_username(..). Так переезд на Postgres потом будет простым.",
+          "h": 3,
+          "priority": "high",
+          "deadline": "2026-11-18",
+          "order": 38
+        },
+        {
+          "id": "s2-time",
+          "track": "db",
+          "type": "learn",
+          "title": "Время в базе: всегда UTC (ISO-8601 или unix-время)",
+          "how": "Почему не хранить «19.10.2026 22:40» строкой в местном времени.",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-11-19",
+          "order": 40
+        }
+      ],
+      "check": [
+        "Чем PRIMARY KEY отличается от UNIQUE?",
+        "Почему запрос через format!(\"... WHERE email = '{}'\", email) опасен? Что такое SQL-инъекция?",
+        "Что такое миграция и почему нельзя просто поменять CREATE TABLE в старом файле?",
+        "Напиши SELECT, который вернёт 10 последних зарегистрированных пользователей."
+      ],
+      "code": "Э2"
+    },
+    {
+      "id": "s3",
+      "title": "Этап 3. Регистрация end-to-end (шаг 3)",
+      "weeks": "1 неделя",
+      "goal": "Форма регистрации реально создаёт пользователя в базе",
+      "result": "Регистрация → 201, повтор → 409, плохие данные → 400, и auth.js показывает это уведомлениями",
+      "items": [
+        {
+          "id": "s3-serde",
+          "track": "rust",
+          "type": "learn",
+          "title": "serde: #[derive(Deserialize)] struct RegisterRequest, Json<T> как экстрактор",
+          "how": "axum сам превратит JSON из fetch в твою struct. Нет поля — сам ответит 422.",
+          "links": [
+            [
+              "serde.rs",
+              "https://serde.rs/"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-20",
+          "order": 41
+        },
+        {
+          "id": "s3-state",
+          "track": "rust",
+          "type": "learn",
+          "title": "State: как пул базы попадает в обработчик",
+          "how": "async fn register(State(pool): State<SqlitePool>, Json(req): Json<RegisterRequest>). Пул внутри уже Arc — клонировать дёшево.",
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-21",
+          "order": 43
+        },
+        {
+          "id": "s3-hash-theory",
+          "track": "sec",
+          "type": "learn",
+          "title": "Хэширование паролей: зачем, почему не sha256, соль; bcrypt и argon2",
+          "how": "Пароль никогда не хранится. Быстрые хэши перебираются миллиардами в секунду, bcrypt специально медленный. argon2 — более современный вариант, знать про него.",
+          "links": [
+            [
+              "OWASP: хранение паролей",
+              "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-22",
+          "order": 45
+        },
+        {
+          "id": "s3-bcrypt",
+          "track": "sec",
+          "type": "cav",
+          "title": "CAV: bcrypt::hash при регистрации",
+          "how": "В базе строка вида $2b$12$... — в ней уже есть соль и стоимость.",
+          "h": 1.5,
+          "priority": "high",
+          "deadline": "2026-11-24",
+          "order": 47
+        },
+        {
+          "id": "s3-register",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: POST /api/register → 201 / 400 / 409",
+          "how": "validate.rs → 400, нарушение UNIQUE из sqlx → 409, успех → 201. Ответ ошибки — JSON {\"error\": \"...\"}.",
+          "h": 4,
+          "priority": "high",
+          "deadline": "2026-11-27",
+          "order": 49
+        },
+        {
+          "id": "s3-apperror",
+          "track": "rust",
+          "type": "cav",
+          "title": "Rust: enum AppError + impl IntoResponse + From<sqlx::Error>",
+          "how": "Чтобы в обработчиках работал ? и каждая ошибка сама превращалась в правильный код ответа. Можно с thiserror.",
+          "links": [
+            [
+              "axum: обработка ошибок",
+              "https://docs.rs/axum/latest/axum/error_handling/index.html"
+            ],
+            [
+              "thiserror",
+              "https://docs.rs/thiserror/latest/thiserror/"
+            ]
+          ],
+          "h": 4,
+          "priority": "high",
+          "deadline": "2026-11-29",
+          "order": 51
+        },
+        {
+          "id": "s3-validate",
+          "track": "sec",
+          "type": "learn",
+          "title": "Валидация на сервере: никогда не доверять клиенту",
+          "how": "Проверки в JS — для удобства. Защита — только на сервере: запрос можно отправить curl-ом в обход формы.",
+          "h": 0.5,
+          "priority": "medium",
+          "deadline": "2026-11-30",
+          "order": 53
+        },
+        {
+          "id": "s3-js",
+          "track": "js",
+          "type": "cav",
+          "title": "auth.js: try/catch вокруг fetch, текст ошибки из res.json()",
+          "how": "fetch бросает исключение, если сервер выключен. Для 400/409 показать текст от сервера в createNotification.",
+          "links": [
+            [
+              "learn.javascript.ru: fetch",
+              "https://learn.javascript.ru/fetch"
+            ],
+            [
+              "try..catch",
+              "https://learn.javascript.ru/try-catch"
+            ]
+          ],
+          "h": 2,
+          "priority": "high",
+          "deadline": "2026-12-02",
+          "order": 55
+        },
+        {
+          "id": "s3-xss",
+          "track": "sec",
+          "type": "cav",
+          "title": "XSS: в createNotification текст через textContent, а не innerHTML",
+          "how": "Как только message начнёт приходить с сервера, <img src=x onerror=...> в нём выполнится. createElement + textContent безопасны.",
+          "links": [
+            [
+              "OWASP: XSS",
+              "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html"
+            ]
+          ],
+          "h": 1,
+          "priority": "high",
+          "deadline": "2026-12-03",
+          "order": 57
+        }
+      ],
+      "check": [
+        "Какой код ответа, если email уже занят? А если пароль слишком короткий?",
+        "Почему пароль нельзя хэшировать sha256?",
+        "Зачем проверять данные на сервере, если JS уже проверил?",
+        "Что случится, если через innerHTML вставить строку <img src=x onerror=alert(1)>?"
+      ],
+      "code": "Э3"
+    },
+    {
+      "id": "s4",
+      "title": "Этап 4. Вход, JWT в httpOnly-cookie, app.html (шаги 4–6)",
+      "weeks": "1–1,5 недели",
+      "goal": "Пользователь входит, сервер его узнаёт, app.html пускает только своих",
+      "result": "Вход → cookie → /api/me знает, кто ты → выход. Без входа app.html отправляет на auth.html",
+      "items": [
+        {
+          "id": "s4-cookie",
+          "track": "sec",
+          "type": "learn",
+          "title": "Cookie: Set-Cookie, HttpOnly, Secure, SameSite=Lax, Path, Max-Age",
+          "how": "Разобрано в диалоге: сервер ставит cookie, браузер сам прикладывает её к каждому запросу, JS её не видит.",
+          "links": [
+            [
+              "MDN: Cookies",
+              "https://developer.mozilla.org/ru/docs/Web/HTTP/Cookies"
+            ]
+          ],
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2026-12-04",
+          "order": 58
+        },
+        {
+          "id": "s4-jwt",
+          "track": "sec",
+          "type": "learn",
+          "title": "JWT: header.payload.signature, срок exp, секрет в .env (dotenvy)",
+          "how": "Подпись доказывает, что токен выдал твой сервер. Содержимое JWT не зашифровано — не класть туда секреты. Минус JWT: нельзя «отозвать» до истечения срока.",
+          "links": [
+            [
+              "jwt.io — разобрать токен",
+              "https://jwt.io/"
+            ],
+            [
+              "dotenvy",
+              "https://docs.rs/dotenvy/latest/dotenvy/"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-12-05",
+          "order": 60
+        },
+        {
+          "id": "s4-login",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: POST /api/login — bcrypt::verify, JWT, Set-Cookie",
+          "how": "token=<jwt>; HttpOnly; SameSite=Lax; Path=/; Max-Age=604800. Крейт jsonwebtoken.",
+          "links": [
+            [
+              "axum-extra: cookies",
+              "https://docs.rs/axum-extra/latest/axum_extra/extract/cookie/index.html"
+            ]
+          ],
+          "h": 4,
+          "priority": "high",
+          "deadline": "2026-12-07",
+          "order": 62
+        },
+        {
+          "id": "s4-same-error",
+          "track": "sec",
+          "type": "learn",
+          "title": "Одинаковый ответ «неверный логин или пароль»",
+          "how": "Не подсказывать, что именно неверно: иначе можно узнать, какие логины существуют.",
+          "h": 0.5,
+          "priority": "medium",
+          "deadline": "2026-12-08",
+          "order": 64
+        },
+        {
+          "id": "s4-extractor",
+          "track": "rust",
+          "type": "cav",
+          "title": "Rust: свой экстрактор CurrentUser через FromRequestParts",
+          "how": "Обработчик просто пишет user: CurrentUser в аргументах — и если токена нет или он плохой, axum сам вернёт 401. Это «middleware» для защищённых маршрутов.",
+          "links": [
+            [
+              "axum: extractors",
+              "https://docs.rs/axum/latest/axum/extract/index.html"
+            ]
+          ],
+          "h": 4,
+          "priority": "high",
+          "deadline": "2026-12-10",
+          "order": 65
+        },
+        {
+          "id": "s4-me",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: GET /api/me и POST /api/logout (cookie с Max-Age=0)",
+          "how": "JS не может сам понять, залогинен ли пользователь, и не может удалить HttpOnly-cookie — для этого эти два маршрута.",
+          "h": 3,
+          "priority": "high",
+          "deadline": "2026-12-12",
+          "order": 67
+        },
+        {
+          "id": "s4-js-login",
+          "track": "js",
+          "type": "cav",
+          "title": "auth.js: обработчик formLogin → переход на app.html",
+          "how": "Cookie браузер сохранит и отправит сам — в JS с токеном ничего делать не нужно.",
+          "h": 2,
+          "priority": "high",
+          "deadline": "2026-12-16",
+          "order": 69
+        },
+        {
+          "id": "s4-app",
+          "track": "js",
+          "type": "cav",
+          "title": "app.html + scripts/app.js: fetch('/api/me'), при 401 — на auth.html",
+          "how": "Каркас будущего мессенджера. Кнопка «выйти» → /api/logout.",
+          "h": 3,
+          "priority": "high",
+          "deadline": "2026-12-17",
+          "order": 70
+        },
+        {
+          "id": "s4-csrf",
+          "track": "sec",
+          "type": "learn",
+          "title": "CSRF, SameSite и CORS: что это и почему нам CORS не нужен",
+          "how": "Фронт и API на одном origin (localhost:3000). SameSite=Lax закрывает основную часть CSRF.",
+          "links": [
+            [
+              "MDN: CORS",
+              "https://developer.mozilla.org/ru/docs/Web/HTTP/CORS"
+            ],
+            [
+              "OWASP: CSRF",
+              "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-12-18",
+          "order": 72
+        },
+        {
+          "id": "s4-sessions-db",
+          "track": "db",
+          "type": "practice",
+          "title": "По желанию: таблица sessions — «выйти на всех устройствах»",
+          "how": "Хранить выданные токены (их хэш) в базе, чтобы уметь их отзывать. Хорошая практика по SQL и ответ на главный минус JWT.",
+          "h": 5,
+          "priority": "low",
+          "deadline": "2026-12-22",
+          "order": 74
+        },
+        {
+          "id": "s4-ratelimit",
+          "track": "sec",
+          "type": "practice",
+          "title": "По желанию: ограничение частоты запросов к /api/login (tower_governor)",
+          "how": "Защита от перебора паролей.",
+          "links": [
+            [
+              "tower_governor",
+              "https://docs.rs/tower_governor/latest/tower_governor/"
+            ]
+          ],
+          "h": 2,
+          "priority": "low",
+          "deadline": "2026-12-25",
+          "order": 76
+        }
+      ],
+      "check": [
+        "Что даёт флаг HttpOnly и от чего он НЕ защищает?",
+        "Можно ли прочитать содержимое JWT без секрета? А подделать?",
+        "Чем аутентификация отличается от авторизации?",
+        "Как выйти из аккаунта, если JS не может удалить cookie?"
+      ],
+      "code": "Э4"
+    },
+    {
+      "id": "s5",
+      "title": "Фронтенд-подтяжка: HTML, CSS, JS (параллельно с этапами 1–4)",
+      "weeks": "~1 неделя суммарно, по ходу",
+      "goal": "Аккуратная страница входа и каркас интерфейса мессенджера",
+      "result": "Карточка «Вход / Регистрация» с вкладками и макет app.html",
+      "parallel": true,
+      "items": [
+        {
+          "id": "s5-validation",
+          "track": "front",
+          "type": "learn",
+          "title": "Валидация форм: required, type=email, minlength + novalidate и form.checkValidity()",
+          "how": "Браузерные подсказки выключены (novalidate), а checkValidity() всё равно скажет, валидна ли форма — и ты показываешь своё уведомление. Про <label> и autocomplete — просто знать, зачем они (доступность, менеджеры паролей).",
+          "links": [
+            [
+              "learn.javascript.ru: формы",
+              "https://learn.javascript.ru/forms-controls"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-01",
+          "order": 17
+        },
+        {
+          "id": "s5-box",
+          "track": "front",
+          "type": "learn",
+          "title": "Box model: box-sizing, margin / padding, единицы rem, %, vh",
+          "how": "Почему * { box-sizing: border-box } есть почти в каждом проекте.",
+          "links": [
+            [
+              "MDN: box model",
+              "https://developer.mozilla.org/ru/docs/Learn/CSS/Building_blocks/The_box_model"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-02",
+          "order": 19
+        },
+        {
+          "id": "s5-flex",
+          "track": "front",
+          "type": "practice",
+          "title": "Flexbox: пройти Flexbox Froggy",
+          "how": "24 уровня, после них flex перестаёт быть магией.",
+          "links": [
+            [
+              "Flexbox Froggy",
+              "https://flexboxfroggy.com/#ru"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-03",
+          "order": 21
+        },
+        {
+          "id": "s5-grid",
+          "track": "front",
+          "type": "practice",
+          "title": "Grid: пройти Grid Garden",
+          "how": "Grid — для раскладки страницы: список чатов | лента | поле ввода.",
+          "links": [
+            [
+              "Grid Garden",
+              "https://cssgridgarden.com/#ru"
+            ],
+            [
+              "MDN: grid",
+              "https://developer.mozilla.org/ru/docs/Web/CSS/CSS_grid_layout"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-14",
+          "order": 34
+        },
+        {
+          "id": "s5-vars",
+          "track": "front",
+          "type": "learn",
+          "title": "CSS-переменные, тёмная тема, transition, :hover и :focus-visible",
+          "how": "Как в твоём plancry/u: --bg-void, --accent-cyan. Сделать так же для CAV.",
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-17",
+          "order": 37
+        },
+        {
+          "id": "s5-media",
+          "track": "front",
+          "type": "learn",
+          "title": "Адаптивность: media queries, мобильная раскладка",
+          "how": "На телефоне список чатов и лента — разные экраны.",
+          "links": [
+            [
+              "MDN: media queries",
+              "https://developer.mozilla.org/ru/docs/Web/CSS/CSS_media_queries/Using_media_queries"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-11-19",
+          "order": 39
+        },
+        {
+          "id": "s5-dom",
+          "track": "js",
+          "type": "learn",
+          "title": "DOM: querySelector, createElement, append, classList, dataset, textContent vs innerHTML",
+          "how": "Сообщения в чате будем рисовать только через createElement + textContent.",
+          "links": [
+            [
+              "learn.javascript.ru: документ",
+              "https://learn.javascript.ru/document"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-11-30",
+          "order": 52
+        },
+        {
+          "id": "s5-events",
+          "track": "js",
+          "type": "learn",
+          "title": "События: addEventListener, submit + preventDefault, делегирование",
+          "how": "Один обработчик на весь список чатов вместо обработчика на каждый чат.",
+          "links": [
+            [
+              "Делегирование событий",
+              "https://learn.javascript.ru/event-delegation"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-12-01",
+          "order": 54
+        },
+        {
+          "id": "s5-async",
+          "track": "js",
+          "type": "learn",
+          "title": "Промисы, async/await, обёртка api(path, data)",
+          "how": "Одна функция для всех запросов: заголовки, JSON, ошибка с текстом от сервера.",
+          "links": [
+            [
+              "Промисы",
+              "https://learn.javascript.ru/promise-basics"
+            ],
+            [
+              "async/await",
+              "https://learn.javascript.ru/async-await"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-12-03",
+          "order": 56
+        },
+        {
+          "id": "s5-modules",
+          "track": "js",
+          "type": "learn",
+          "title": "ES-модули: type=\"module\", import / export",
+          "how": "Разнести код: api.js (запросы), ui.js (уведомления), auth.js (формы).",
+          "links": [
+            [
+              "Модули",
+              "https://learn.javascript.ru/modules-intro"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2026-12-18",
+          "order": 71
+        },
+        {
+          "id": "s5-tabs",
+          "track": "front",
+          "type": "cav",
+          "title": "CAV: карточка «Вход / Регистрация» с вкладками + стек уведомлений",
+          "how": "Сейчас обе формы — секции по 100vh друг под другом, а уведомления ложатся в одну точку поверх друг друга. Сделать одну карточку с переключателем и уведомления стопкой (success / error).",
+          "h": 4,
+          "priority": "high",
+          "deadline": "2026-12-20",
+          "order": 73
+        },
+        {
+          "id": "s5-chat-layout",
+          "track": "front",
+          "type": "cav",
+          "title": "CAV: макет app.html — список чатов, лента, поле ввода",
+          "how": "Пока с выдуманными данными. В этапе 6 подключим настоящие.",
+          "h": 5,
+          "priority": "high",
+          "deadline": "2026-12-24",
+          "order": 75
+        }
+      ],
+      "check": [
+        "Чем textContent отличается от innerHTML и когда что использовать?",
+        "Когда flex, а когда grid?",
+        "Что делает event.preventDefault() в обработчике submit?",
+        "Что вернёт form.checkValidity(), если в required-поле пусто, а у формы стоит novalidate?"
+      ],
+      "code": "Фронт"
+    },
+    {
+      "id": "s6",
+      "title": "Этап 5. Модель данных мессенджера",
+      "weeks": "1,5–2 недели",
+      "goal": "Чаты и сообщения в базе, REST API для истории",
+      "result": "Можно создать личный чат, отправить сообщение и увидеть историю (пока с обновлением страницы)",
+      "items": [
+        {
+          "id": "s6-relations",
+          "track": "db",
+          "type": "learn",
+          "title": "Связи 1:N и N:M, FOREIGN KEY, ON DELETE CASCADE, PRAGMA foreign_keys = ON",
+          "how": "В SQLite внешние ключи по умолчанию ВЫКЛЮЧЕНЫ — частая ловушка.",
+          "links": [
+            [
+              "SQLite: foreign keys",
+              "https://www.sqlite.org/foreignkeys.html"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2026-12-26",
+          "order": 77
+        },
+        {
+          "id": "s6-schema",
+          "track": "db",
+          "type": "cav",
+          "title": "CAV: схема chats, chat_members, messages (новая миграция)",
+          "how": "chats(id, kind, title, created_at); chat_members(chat_id, user_id, role, joined_at, PRIMARY KEY(chat_id, user_id)); messages(id, chat_id, sender_id, body, created_at, edited_at). Сначала нарисовать на бумаге.",
+          "h": 3,
+          "priority": "high",
+          "deadline": "2026-12-29",
+          "order": 79
+        },
+        {
+          "id": "s6-join",
+          "track": "db",
+          "type": "learn",
+          "title": "JOIN (INNER / LEFT), GROUP BY, COUNT, MAX, подзапросы",
+          "how": "Главный запрос мессенджера: «мои чаты + последнее сообщение в каждом, по свежести».",
+          "h": 4,
+          "priority": "medium",
+          "deadline": "2026-12-30",
+          "order": 80
+        },
+        {
+          "id": "s6-index",
+          "track": "db",
+          "type": "learn",
+          "title": "Индексы: что это, когда нужны, EXPLAIN QUERY PLAN",
+          "how": "Индекс (chat_id, id) на messages — история грузится мгновенно даже при миллионе сообщений.",
+          "links": [
+            [
+              "SQLite: EXPLAIN QUERY PLAN",
+              "https://www.sqlite.org/eqp.html"
+            ],
+            [
+              "Use The Index, Luke",
+              "https://use-the-index-luke.com/"
+            ]
+          ],
+          "h": 2.5,
+          "priority": "medium",
+          "deadline": "2026-12-31",
+          "order": 81
+        },
+        {
+          "id": "s6-paging",
+          "track": "db",
+          "type": "learn",
+          "title": "Пагинация: OFFSET vs курсор (WHERE id < ? ORDER BY id DESC LIMIT 50)",
+          "how": "OFFSET на больших таблицах медленный и «прыгает», когда приходят новые сообщения. Курсор — нет.",
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-01-05",
+          "order": 83
+        },
+        {
+          "id": "s6-tx",
+          "track": "db",
+          "type": "learn",
+          "title": "Транзакции: BEGIN / COMMIT / ROLLBACK, ACID, транзакции в sqlx",
+          "how": "Создать чат и добавить двух участников — либо всё, либо ничего.",
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-01-06",
+          "order": 84
+        },
+        {
+          "id": "s6-api",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: POST /api/chats, GET /api/chats, GET /api/chats/{id}/messages?before=, POST /api/chats/{id}/messages",
+          "how": "Все маршруты принимают CurrentUser. Ответы — JSON через serde.",
+          "h": 8,
+          "priority": "high",
+          "deadline": "2027-01-14",
+          "order": 86
+        },
+        {
+          "id": "s6-authz",
+          "track": "sec",
+          "type": "cav",
+          "title": "Авторизация: читать и писать в чат может только участник",
+          "how": "Иначе любой подберёт id чата и прочитает чужую переписку. Не участник → 404.",
+          "h": 2,
+          "priority": "high",
+          "deadline": "2027-01-14",
+          "order": 87
+        },
+        {
+          "id": "s6-js",
+          "track": "js",
+          "type": "cav",
+          "title": "app.html: список чатов и история с API, отправка сообщения",
+          "how": "Подключить макет к настоящим данным.",
+          "h": 6,
+          "priority": "high",
+          "deadline": "2027-01-17",
+          "order": 88
+        },
+        {
+          "id": "s6-rust-deeper",
+          "track": "rust",
+          "type": "learn",
+          "title": "Rust глубже: lifetimes на базовом уровне, свои трейты и дженерики",
+          "how": "Зачем 'a и почему компилятор его иногда просит.",
+          "links": [
+            [
+              "Книга, гл. 10.3",
+              "https://doc.rust-lang.ru/book/ch10-03-lifetime-syntax.html"
+            ]
+          ],
+          "h": 4,
+          "priority": "medium",
+          "deadline": "2027-01-20",
+          "order": 90
+        }
+      ],
+      "check": [
+        "Почему chat_members — отдельная таблица, а не поле members в chats?",
+        "Напиши запрос: 50 сообщений чата 5 от новых к старым, старше сообщения с id 1000.",
+        "Что будет с сообщениями, если удалить чат, и как это задаётся в схеме?",
+        "Зачем транзакция при создании чата?"
+      ],
+      "code": "Э5"
+    },
+    {
+      "id": "s7",
+      "title": "Этап 6. Реальное время: WebSocket",
+      "weeks": "2 недели",
+      "goal": "Сообщения приходят мгновенно, без перезагрузки",
+      "result": "Две вкладки под разными пользователями переписываются в реальном времени",
+      "items": [
+        {
+          "id": "s7-theory",
+          "track": "web",
+          "type": "learn",
+          "title": "HTTP vs WebSocket; polling, long-polling, SSE, WS; рукопожатие Upgrade",
+          "how": "Почему для чата нужен постоянный двусторонний канал.",
+          "links": [
+            [
+              "MDN: WebSockets",
+              "https://developer.mozilla.org/ru/docs/Web/API/WebSockets_API"
+            ]
+          ],
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2027-01-21",
+          "order": 91
+        },
+        {
+          "id": "s7-conc",
+          "track": "rust",
+          "type": "learn",
+          "title": "Конкурентность: потоки vs async-задачи, tokio::spawn, Send и Sync на пальцах",
+          "how": "Что значит «future is not Send» и что с этим делать.",
+          "links": [
+            [
+              "Книга, гл. 16",
+              "https://doc.rust-lang.ru/book/ch16-00-concurrency.html"
+            ]
+          ],
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2027-01-22",
+          "order": 92
+        },
+        {
+          "id": "s7-locks",
+          "track": "rust",
+          "type": "learn",
+          "title": "Arc, Mutex vs RwLock, почему нельзя держать lock через .await",
+          "how": "Классическая причина зависаний async-серверов.",
+          "links": [
+            [
+              "Tokio: shared state",
+              "https://tokio.rs/tokio/tutorial/shared-state"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-01-23",
+          "order": 93
+        },
+        {
+          "id": "s7-channels",
+          "track": "rust",
+          "type": "learn",
+          "title": "Каналы tokio: mpsc, broadcast; tokio::select!",
+          "how": "Каждое подключение получает свой канал, хаб кладёт в него сообщения.",
+          "links": [
+            [
+              "Tokio: channels",
+              "https://tokio.rs/tokio/tutorial/channels"
+            ],
+            [
+              "Tokio: select",
+              "https://tokio.rs/tokio/tutorial/select"
+            ]
+          ],
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2027-01-25",
+          "order": 95
+        },
+        {
+          "id": "s7-protocol",
+          "track": "rust",
+          "type": "learn",
+          "title": "Протокол на serde: #[serde(tag = \"type\")] enum ClientMsg / ServerMsg",
+          "how": "{\"type\":\"send\",\"chat_id\":1,\"body\":\"hi\"} сразу превращается в вариант enum. Тут enum раскрывается полностью.",
+          "links": [
+            [
+              "serde: представления enum",
+              "https://serde.rs/enum-representations.html"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-01-26",
+          "order": 96
+        },
+        {
+          "id": "s7-example",
+          "track": "rust",
+          "type": "practice",
+          "title": "Разобрать пример axum examples/chat построчно",
+          "how": "Запустить, открыть две вкладки, прочитать код и объяснить мне каждую часть.",
+          "links": [
+            [
+              "axum chat example",
+              "https://github.com/tokio-rs/axum/tree/main/examples/chat"
+            ]
+          ],
+          "h": 4,
+          "priority": "medium",
+          "deadline": "2027-01-28",
+          "order": 97
+        },
+        {
+          "id": "s7-ws",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: GET /api/ws — WebSocketUpgrade, вход по cookie",
+          "how": "Подключиться может только залогиненный: CurrentUser работает и тут.",
+          "links": [
+            [
+              "axum: ws",
+              "https://docs.rs/axum/latest/axum/extract/ws/index.html"
+            ]
+          ],
+          "h": 4,
+          "priority": "high",
+          "deadline": "2027-01-30",
+          "order": 98
+        },
+        {
+          "id": "s7-hub",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: хаб подключений — сначала сохранить в базу, потом разослать участникам",
+          "how": "HashMap<user_id, Vec<mpsc::Sender<ServerMsg>>> в State. Пользователь может быть онлайн с двух вкладок.",
+          "h": 8,
+          "priority": "high",
+          "deadline": "2027-02-02",
+          "order": 99
+        },
+        {
+          "id": "s7-js",
+          "track": "js",
+          "type": "cav",
+          "title": "JS: new WebSocket, onmessage, переподключение, отрисовка входящих",
+          "how": "Если связь оборвалась — переподключиться через 1, 2, 4… секунды.",
+          "links": [
+            [
+              "learn.javascript.ru: WebSocket",
+              "https://learn.javascript.ru/websocket"
+            ]
+          ],
+          "h": 5,
+          "priority": "high",
+          "deadline": "2027-02-05",
+          "order": 101
+        },
+        {
+          "id": "s7-extras",
+          "track": "rust",
+          "type": "cav",
+          "title": "CAV: «печатает…» и онлайн-статус",
+          "how": "По желанию, но очень приятно видеть в своём мессенджере.",
+          "h": 5,
+          "priority": "high",
+          "deadline": "2027-02-07",
+          "order": 102
+        }
+      ],
+      "check": [
+        "Почему сообщение сначала сохраняется в базу, а потом рассылается?",
+        "Чем mpsc отличается от broadcast?",
+        "Что будет, если держать MutexGuard во время .await?",
+        "Как сервер узнаёт, кто подключился по WebSocket?"
+      ],
+      "code": "Э6"
+    },
+    {
+      "id": "s8",
+      "title": "Этап 7. PostgreSQL",
+      "weeks": "1 неделя",
+      "goal": "CAV работает на PostgreSQL — как в продакшене",
+      "result": "Миграции перенесены, CAV ходит в Postgres, есть проверенный бэкап",
+      "items": [
+        {
+          "id": "s8-why",
+          "track": "db",
+          "type": "learn",
+          "title": "Зачем Postgres: одновременная запись, строгие типы, роли; отличия от SQLite",
+          "how": "SQLite — файл и один писатель за раз. Postgres — отдельный сервер.",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2027-02-08",
+          "order": 103
+        },
+        {
+          "id": "s8-install",
+          "track": "linux",
+          "type": "practice",
+          "title": "Postgres в WSL / Ubuntu: apt install, systemctl status, psql (\\l \\c \\dt \\d \\du)",
+          "how": "Первая встреча с сервисом в Linux — пригодится для systemd в этапе 8.",
+          "links": [
+            [
+              "Postgres для Ubuntu",
+              "https://www.postgresql.org/download/linux/ubuntu/"
+            ],
+            [
+              "Документация (RU)",
+              "https://postgrespro.ru/docs/postgresql/current/"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-02-08",
+          "order": 104
+        },
+        {
+          "id": "s8-roles",
+          "track": "db",
+          "type": "learn",
+          "title": "Роли и права: CREATE ROLE cav LOGIN, CREATE DATABASE cav OWNER cav",
+          "how": "Приложение ходит в базу своей ролью с минимальными правами, не суперпользователем.",
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2027-02-11",
+          "order": 106
+        },
+        {
+          "id": "s8-types",
+          "track": "db",
+          "type": "learn",
+          "title": "Типы: BIGINT GENERATED ALWAYS AS IDENTITY, TIMESTAMPTZ, TEXT, UUID, BOOLEAN",
+          "how": "Email — уникальность без учёта регистра: UNIQUE по lower(email).",
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2027-02-12",
+          "order": 107
+        },
+        {
+          "id": "s8-migrate",
+          "track": "db",
+          "type": "cav",
+          "title": "CAV: переезд — миграции под Postgres, sqlx feature postgres, DATABASE_URL в .env",
+          "how": "Тот самый переезд, про который ты спрашивала. Весь SQL уже в db.rs: меняем ? на $1, тип пула и миграции. Старые данные — через pgloader.",
+          "h": 5,
+          "priority": "high",
+          "deadline": "2027-02-14",
+          "order": 108
+        },
+        {
+          "id": "s8-explain",
+          "track": "db",
+          "type": "learn",
+          "title": "EXPLAIN ANALYZE и индексы в Postgres",
+          "how": "Сравнить план запроса истории сообщений с индексом и без.",
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-02-18",
+          "order": 110
+        },
+        {
+          "id": "s8-backup",
+          "track": "db",
+          "type": "practice",
+          "title": "Бэкап: pg_dump / pg_restore, восстановить на чистую базу",
+          "how": "Бэкап, который ни разу не восстанавливали, — не бэкап.",
+          "links": [
+            [
+              "pg_dump",
+              "https://postgrespro.ru/docs/postgresql/current/app-pgdump"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-02-19",
+          "order": 111
+        }
+      ],
+      "check": [
+        "Чем роль Postgres отличается от пользователя Linux?",
+        "Почему в Postgres параметры $1, $2, а в SQLite ?",
+        "Как проверить, что бэкап рабочий?"
+      ],
+      "code": "Э7"
+    },
+    {
+      "id": "s9",
+      "title": "Этап 8. Свой Linux-сервер и деплой",
+      "weeks": "2 недели",
+      "goal": "CAV работает на твоём VPS по https",
+      "result": "https://твой-домен открывает CAV, сервер переживает перезагрузку, бэкапы делаются сами",
+      "items": [
+        {
+          "id": "s9-vps",
+          "track": "linux",
+          "type": "practice",
+          "title": "VPS: свой сервер с Ubuntu LTS, вход по ssh",
+          "how": "У тебя уже есть VPS с nginx (для игры) — можно поселить CAV рядом. Цель этапа — уметь всё на нём делать самой, без Claude.",
+          "h": 1,
+          "priority": "medium",
+          "deadline": "2027-02-19",
+          "order": 112
+        },
+        {
+          "id": "s9-harden",
+          "track": "linux",
+          "type": "practice",
+          "title": "Защита: свой пользователь с sudo, вход только по ключу, root по ssh запрещён",
+          "how": "PermitRootLogin no, PasswordAuthentication no. Не закрывать текущую сессию, пока не проверила вход в новой!",
+          "links": [
+            [
+              "Initial server setup",
+              "https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu"
+            ]
+          ],
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2027-02-21",
+          "order": 113
+        },
+        {
+          "id": "s9-firewall",
+          "track": "linux",
+          "type": "practice",
+          "title": "ufw (только 22, 80, 443), fail2ban, unattended-upgrades",
+          "how": "Сначала разрешить ssh, потом включать ufw — иначе отрежешь себя от сервера.",
+          "links": [
+            [
+              "UFW",
+              "https://help.ubuntu.com/community/UFW"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-02-22",
+          "order": 114
+        },
+        {
+          "id": "s9-build",
+          "track": "rust",
+          "type": "practice",
+          "title": "Сборка: cargo build --release, что везти на сервер (бинарник, frontend, .env)",
+          "how": "Собирать на сервере или в WSL с той же версией Ubuntu. .env — права 600.",
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-02-22",
+          "order": 115
+        },
+        {
+          "id": "s9-systemd",
+          "track": "linux",
+          "type": "cav",
+          "title": "systemd: cav.service (User=cav, WorkingDirectory, EnvironmentFile, Restart=on-failure)",
+          "how": "systemctl enable --now cav, логи — journalctl -u cav -f. После reboot CAV поднимается сам.",
+          "links": [
+            [
+              "ArchWiki: systemd (RU)",
+              "https://wiki.archlinux.org/title/Systemd_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"
+            ]
+          ],
+          "h": 3,
+          "priority": "high",
+          "deadline": "2027-02-24",
+          "order": 116
+        },
+        {
+          "id": "s9-nginx",
+          "track": "linux",
+          "type": "cav",
+          "title": "nginx: reverse proxy на 127.0.0.1:3000 + проксирование WebSocket",
+          "how": "Для /api/ws нужны заголовки Upgrade и Connection, иначе WebSocket не заработает.",
+          "links": [
+            [
+              "nginx: для начинающих",
+              "https://nginx.org/ru/docs/beginners_guide.html"
+            ],
+            [
+              "nginx: WebSocket",
+              "https://nginx.org/en/docs/http/websocket.html"
+            ]
+          ],
+          "h": 4,
+          "priority": "high",
+          "deadline": "2027-02-25",
+          "order": 117
+        },
+        {
+          "id": "s9-https",
+          "track": "linux",
+          "type": "practice",
+          "title": "Домен, DNS A-запись, HTTPS через certbot, автопродление",
+          "how": "После HTTPS включить флаг Secure у cookie.",
+          "links": [
+            [
+              "certbot",
+              "https://certbot.eff.org/"
+            ]
+          ],
+          "h": 2,
+          "priority": "medium",
+          "deadline": "2027-02-26",
+          "order": 118
+        },
+        {
+          "id": "s9-pg",
+          "track": "db",
+          "type": "practice",
+          "title": "Postgres на сервере: только локальный доступ, бэкап по cron / systemd timer",
+          "how": "Порт 5432 наружу не открывать. Бэкапы хранить не только на этом же сервере.",
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2027-02-28",
+          "order": 119
+        },
+        {
+          "id": "s9-monitor",
+          "track": "linux",
+          "type": "learn",
+          "title": "Наблюдение: df -h, du -sh, free -h, htop, journalctl --disk-usage, logrotate",
+          "how": "Самая частая смерть маленького сервера — закончилось место на диске.",
+          "h": 1.5,
+          "priority": "medium",
+          "deadline": "2027-02-28",
+          "order": 120
+        },
+        {
+          "id": "s9-deploy",
+          "track": "linux",
+          "type": "cav",
+          "title": "deploy.sh: git pull → cargo build --release → systemctl restart cav",
+          "how": "Один скрипт вместо ручных шагов. Потом можно перенести в GitHub Actions.",
+          "h": 3,
+          "priority": "high",
+          "deadline": "2027-03-02",
+          "order": 121
+        },
+        {
+          "id": "s9-ci",
+          "track": "git",
+          "type": "practice",
+          "title": "GitHub Actions: cargo fmt --check, clippy, test на каждый push",
+          "how": "Чтобы сломанный код не попадал в develop.",
+          "h": 3,
+          "priority": "medium",
+          "deadline": "2027-03-03",
+          "order": 122
+        }
+      ],
+      "check": [
+        "Почему CAV слушает 127.0.0.1:3000, а наружу смотрит только nginx?",
+        "Что будет с CAV после перезагрузки сервера и почему?",
+        "Где смотреть, почему сервис упал?",
+        "В каком порядке включать ufw и почему?"
+      ],
+      "code": "Э8"
+    },
+    {
+      "id": "s10",
+      "title": "Этап 9. Полировка и рост",
+      "weeks": "по желанию",
+      "goal": "Мессенджер, который не стыдно показать",
+      "result": "CAV в портфолио + уверенный Rust",
+      "items": [
+        {
+          "id": "s10-tests",
+          "track": "rust",
+          "type": "practice",
+          "title": "Интеграционные тесты API (tower::ServiceExt::oneshot) на тестовой базе",
+          "how": "Регистрация → вход → чат → сообщение в одном тесте.",
+          "h": 6,
+          "priority": "low",
+          "deadline": "2027-03-06",
+          "order": 123
+        },
+        {
+          "id": "s10-config",
+          "track": "rust",
+          "type": "practice",
+          "title": "Конфиг из переменных окружения, graceful shutdown",
+          "how": "При SIGTERM сервер дожидается текущих запросов и закрывается аккуратно.",
+          "h": 3,
+          "priority": "low",
+          "deadline": "2027-03-07",
+          "order": 124
+        },
+        {
+          "id": "s10-files",
+          "track": "rust",
+          "type": "cav",
+          "title": "Аватары и файлы: multipart, лимиты размера, хранение на диске",
+          "how": "Никогда не доверять имени файла от клиента.",
+          "h": 8,
+          "priority": "low",
+          "deadline": "2027-03-10",
+          "order": 125
+        },
+        {
+          "id": "s10-read",
+          "track": "db",
+          "type": "cav",
+          "title": "Прочитано / не прочитано: last_read_message_id, счётчик непрочитанных",
+          "how": "Хорошая задача на SQL.",
+          "h": 5,
+          "priority": "low",
+          "deadline": "2027-03-13",
+          "order": 126
+        },
+        {
+          "id": "s10-groups",
+          "track": "db",
+          "type": "cav",
+          "title": "Групповые чаты: роли, приглашения, выход из чата",
+          "how": "Схема уже готова к этому с этапа 5.",
+          "h": 10,
+          "priority": "low",
+          "deadline": "2027-03-17",
+          "order": 127
+        },
+        {
+          "id": "s10-rust",
+          "track": "rust",
+          "type": "learn",
+          "title": "Rust глубже: trait objects (dyn), Box, Rc, RefCell, атомики",
+          "how": "Когда основное пойдёт легко.",
+          "links": [
+            [
+              "Книга, гл. 15",
+              "https://doc.rust-lang.ru/book/ch15-00-smart-pointers.html"
+            ],
+            [
+              "Rust Atomics and Locks",
+              "https://marabos.nl/atomics/"
+            ]
+          ],
+          "h": 10,
+          "priority": "low",
+          "deadline": "2027-03-21",
+          "order": 128
+        },
+        {
+          "id": "s10-e2e",
+          "track": "sec",
+          "type": "learn",
+          "title": "Сквозное шифрование: обзор идей Signal Protocol",
+          "how": "Как мессенджеры прячут переписку даже от своего сервера.",
+          "h": 3,
+          "priority": "low",
+          "deadline": "2027-03-23",
+          "order": 129
+        },
+        {
+          "id": "s10-ts",
+          "track": "js",
+          "type": "learn",
+          "title": "TypeScript, потом React — переезд фронта CAV (как в твоём плане)",
+          "how": "Сначала TS на одном файле (api.ts), потом React. Только когда ванильный JS станет совсем уверенным.",
+          "links": [
+            [
+              "TypeScript Handbook",
+              "https://www.typescriptlang.org/docs/handbook/intro.html"
+            ],
+            [
+              "React (RU)",
+              "https://ru.react.dev/learn"
+            ]
+          ],
+          "h": 20,
+          "priority": "low",
+          "deadline": "2027-03-31",
+          "order": 130
+        },
+        {
+          "id": "s10-redis",
+          "track": "db",
+          "type": "learn",
+          "title": "Redis: онлайн-статусы, кэш, pub/sub между несколькими серверами CAV",
+          "how": "Нужен, когда сервер CAV станет не один. Понять, чем key-value хранилище отличается от SQL.",
+          "h": 6,
+          "priority": "low",
+          "deadline": "2027-04-03",
+          "order": 131
+        },
+        {
+          "id": "s10-docker",
+          "track": "linux",
+          "type": "practice",
+          "title": "Docker и docker compose (CAV + Postgres)",
+          "how": "Альтернатива systemd-деплою, полезно знать для работы.",
+          "links": [
+            [
+              "Docker: get started",
+              "https://docs.docker.com/get-started/"
+            ]
+          ],
+          "h": 6,
+          "priority": "low",
+          "deadline": "2027-04-06",
+          "order": 132
+        }
+      ],
+      "check": [],
+      "code": "Э9"
+    }
+  ],
+  "lessons": [
+    {
+      "date": "2026-10-19",
+      "title": "Разбор проекта и план обучения",
+      "note": "Проанализирован CAV, feature/first-server уже внутри develop (осталось удалить), подтянут диалог «Разметка в auth HTML», составлен план и подключён к plancry. Следующее — этап 0 и main.rs руками."
+    },
+    {
+      "date": "2026-10-18",
+      "title": "Разметка auth.html и каркас сервера",
+      "note": "Формы на <form> + name, auth.js с регистрацией через fetch. Решения: один axum-сервер на :3000 отдаёт API и фронт, SQLite + sqlx-миграции, bcrypt, JWT в httpOnly-cookie, после входа — app.html. Домашка: написать main.rs руками."
+    }
+  ],
+  "schedule": {
+    "start": "2026-10-20",
+    "hoursPerWeek": 16,
+    "totalHours": 393.5,
+    "coreHours": 305,
+    "coreEnd": "2027-03-03",
+    "end": "2027-04-06"
+  },
+  "planacry": {
+    "projectName": "CAV · обучение",
+    "color": "pink",
+    "tag": "#cav-learn:"
+  },
+  "remote": "https://raw.githubusercontent.com/cryzis333/plancry/refs/heads/claude/learning-plan/frontend/learning/plan-data.json"
+}
